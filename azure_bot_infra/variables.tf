@@ -7,7 +7,7 @@ variable "node_version" {
 }
 
 variable "zip_deploy_file" {
-  default = "/Users/maksym/www/02.echo-bot/notifier-bot.zip"
+  default = "../notifier-bot.zip"
 }
 
 variable "bot_name" {

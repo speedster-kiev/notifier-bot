@@ -47,6 +47,8 @@ resource "azurerm_linux_web_app" "notifier_bot_as" {
     identity_ids = [azurerm_user_assigned_identity.notifier_bot_uai.id]
   }
 
+  https_only = true
+
   site_config {
     #acr_user_managed_identity_client_id = ...
     #app_command_line                    = ""
@@ -55,6 +57,11 @@ resource "azurerm_linux_web_app" "notifier_bot_as" {
     }
     always_on         = false // Required for F1 plan (even though docs say that it defaults to false)
     use_32_bit_worker = true // Required for F1 plan
+    app_command_line = "node ./lib/index.js"
+  }
+
+  cors {
+    allowed_origins = ["https://portal.azure.com"]
   }
 
   zip_deploy_file   = var.zip_deploy_file

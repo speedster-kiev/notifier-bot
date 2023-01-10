@@ -3,7 +3,7 @@ variable "resource_group_location" {
 }
 
 variable "node_version" {
-  default = "14-lts"
+  default = "18-lts"
 }
 
 variable "zip_deploy_file" {

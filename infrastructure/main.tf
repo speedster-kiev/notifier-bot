@@ -33,22 +33,6 @@ resource "azurerm_service_plan" "notifier_bot_sp" {
   sku_name            = "F1"
 }
 
-resource "local_file" "env" {
-  content = templatefile("${path.module}/.env.tftpl", {
-    env_params = {
-      "MicrosoftAppType"     = "UserAssignedMSI"
-      "MicrosoftAppId"       = azurerm_user_assigned_identity.notifier_bot_uai.client_id
-      "MicrosoftAppPassword" = ""
-      "MicrosoftAppTenantId" = azurerm_user_assigned_identity.notifier_bot_uai.tenant_id
-    }
-  })
-  filename = "${path.module}/.env"
-
-  depends_on = [
-    azurerm_user_assigned_identity.notifier_bot_uai
-  ]
-}
-
 resource "azurerm_linux_web_app" "notifier_bot_as" {
   name                = "${var.bot_name}-as"
   resource_group_name = azurerm_resource_group.notifier_bot_rg.name
@@ -68,7 +52,6 @@ resource "azurerm_linux_web_app" "notifier_bot_as" {
     }
     always_on                = false // Required for F1 plan (even though docs say that it defaults to false)
     use_32_bit_worker        = true  // Required for F1 plan
-    app_command_line         = "node ./lib/index.js"
     remote_debugging_enabled = true
 
     cors {
@@ -76,9 +59,6 @@ resource "azurerm_linux_web_app" "notifier_bot_as" {
     }
   }
 
-  depends_on = [
-    local_file.env
-  ]
   logs {
     detailed_error_messages = true
     failed_request_tracing  = true
@@ -87,7 +67,7 @@ resource "azurerm_linux_web_app" "notifier_bot_as" {
 
       file_system {
         retention_in_days = 0
-        retention_in_mb   = 35
+        retention_in_mb   = 10
       }
     }
   }

@@ -1,5 +1,7 @@
+
 ## Roadmap
 
-- deploy to existing resource group
 - refactoring of main.tf to spread across more files
 - create documentation
+- add random resourcse
+- move from terraform cloud to azure storage

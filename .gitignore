@@ -1,3 +1,0 @@
-node_modules/
-azure_bot_infra/.terraform/
-azure_bot_infra/bot.tfplan
